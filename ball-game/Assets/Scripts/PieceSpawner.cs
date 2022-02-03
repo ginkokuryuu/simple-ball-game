@@ -18,11 +18,8 @@ public class PieceSpawner : MonoBehaviour
     private void Awake()
     {
         INSTANCE = this;
-    }
-
-    private void Start()
-    {
-        SpawnBall();
+        MyEventSystem.INSTANCE.OnRoundStart += OnRoundStart;
+        MyEventSystem.INSTANCE.OnRoundEnd += OnRoundEnd;
     }
 
     void SpawnBall()
@@ -39,7 +36,6 @@ public class PieceSpawner : MonoBehaviour
 
     public bool TryToSpawnSoldier(SoldierType _soldierType, Owner _owner, Vector3 _position)
     {
-        bool result = false;
         GameObject toBeSpawned;
 
         if(_soldierType == SoldierType.Attacker && _owner == Owner.Player1)
@@ -53,8 +49,28 @@ public class PieceSpawner : MonoBehaviour
         else
             return false;
 
+        if(!EnergyHandler.INSTACE.TrySpentEnergy((int)_owner, 2 + (int)_soldierType))
+            return false;
+
         Instantiate(toBeSpawned, new Vector3(_position.x, 1.5f, _position.z), Quaternion.identity);
-        result = true;
-        return result;
+        return true;
+    }
+
+    public void OnRoundStart()
+    {
+        SpawnBall();
+    }
+
+    public void OnRoundEnd()
+    {
+        Ball ball = ObjectLoader.INSTANCE.Ball;
+        Destroy(ball.gameObject);
+        ObjectLoader.INSTANCE.Ball = null;
+    }
+
+    private void OnDisable()
+    {
+        MyEventSystem.INSTANCE.OnRoundStart -= OnRoundStart;
+        MyEventSystem.INSTANCE.OnRoundEnd -= OnRoundEnd;
     }
 }

@@ -24,6 +24,8 @@ public class DefenderAI : SoldierAI
 
     protected override void ConstructBehaviourTree()
     {
+        IsGameOverNode isGameOverNode = new IsGameOverNode(this);
+
         IsInactiveNode isInactiveNode = new IsInactiveNode(this);
         HasReachedOriginNode hasReachedOriginNode = new HasReachedOriginNode(this);
         ReturnToOriginNode returnToOriginNode = new ReturnToOriginNode(this);
@@ -68,6 +70,7 @@ public class DefenderAI : SoldierAI
 
         rootBehaviourNode = new SelectorNode(new List<Node>
         {
+            isGameOverNode,
             tryToReturnSeq,
             activeSel
         });
@@ -87,17 +90,6 @@ public class DefenderAI : SoldierAI
     public void ChangeMoveTarget(Transform target)
     {
         this.target = target;
-    }
-
-    public void Move(float speed)
-    {
-        moveSpeed = speed;
-        isMoving = true;
-    }
-
-    public void StopMove()
-    {
-        isMoving = false;
     }
 
     private void OnCollisionEnter(Collision collision)

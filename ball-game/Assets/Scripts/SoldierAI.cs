@@ -13,7 +13,7 @@ public class SoldierAI : MonoBehaviour
     protected bool isMoving = false;
     protected float moveSpeed = 0f;
     protected Collider _collider;
-    [SerializeField] private Owner player = Owner.Player1;
+    [SerializeField] protected Owner player = Owner.Player1;
     protected Rigidbody rb;
     Vector3 lookVector = new Vector3();
 
@@ -25,6 +25,11 @@ public class SoldierAI : MonoBehaviour
     protected LayerMask originLayer;
 
     public Owner Player { get => player; set => player = value; }
+
+    protected virtual void Awake()
+    {
+        MyEventSystem.INSTANCE.OnRoundEnd += OnRoundEnd;
+    }
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -66,16 +71,23 @@ public class SoldierAI : MonoBehaviour
         return;
     }
 
+    public void Move(float speed)
+    {
+        moveSpeed = speed;
+        isMoving = true;
+    }
+
+    public void StopMove()
+    {
+        isMoving = false;
+    }
+
     public virtual void Activate()
     {
         isActive = true;
         counterTime = 0f;
         inactiveTime = reactivateTime;
         gameObject.layer = originLayer;
-
-        //rb.isKinematic = false;
-        //if (rb.IsSleeping())
-        //    rb.WakeUp();
     }
 
     public void Inactivate()
@@ -83,12 +95,25 @@ public class SoldierAI : MonoBehaviour
         gameObject.layer = 10;
         isActive = false;
         isMoving = false;
-
-        //rb.isKinematic = true;
     }
 
     public bool StillInactive()
     {
         return !isActive;
+    }
+
+    public virtual void DestroySelf()
+    {
+        Destroy(this.gameObject);
+    }
+
+    public void OnRoundEnd()
+    {
+        DestroySelf();
+    }
+
+    private void OnDestroy()
+    {
+        MyEventSystem.INSTANCE.OnRoundEnd -= OnRoundEnd;
     }
 }

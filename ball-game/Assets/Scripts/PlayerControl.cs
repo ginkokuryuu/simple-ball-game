@@ -8,6 +8,13 @@ public class PlayerControl : MonoBehaviour
 {
     Camera theCamera;
     [SerializeField] LayerMask fieldLayer = 14;
+    bool isRoundStarted = false;
+
+    private void Awake()
+    {
+        MyEventSystem.INSTANCE.OnRoundStart += OnRoundStart;
+        MyEventSystem.INSTANCE.OnRoundEnd += OnRoundEnd;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +25,9 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isRoundStarted)
+            return;
+
         if (Application.platform == RuntimePlatform.Android)
         {
             if (Input.touchCount > 0)
@@ -46,7 +56,6 @@ public class PlayerControl : MonoBehaviour
         Ray ray = theCamera.ScreenPointToRay(_position);
         if(Physics.Raycast(ray, out hit, 3000, fieldLayer))
         {
-            print(hit.point);
             float sidePoint = hit.transform.InverseTransformPoint(hit.point).z;
             bool evenMatch = GameManager.INSTANCE.CurrentMatch % 2 == 0;
             Owner owner;
@@ -71,5 +80,21 @@ public class PlayerControl : MonoBehaviour
     void SpawnSoldier(SoldierType _soldierType, Owner _owner, Vector3 _position)
     {
         PieceSpawner.INSTANCE.TryToSpawnSoldier(_soldierType, _owner, _position);
+    }
+
+    public void OnRoundStart()
+    {
+        isRoundStarted = true;
+    }
+
+    public void OnRoundEnd()
+    {
+        isRoundStarted = false;
+    }
+
+    private void OnDisable()
+    {
+        MyEventSystem.INSTANCE.OnRoundStart -= OnRoundStart;
+        MyEventSystem.INSTANCE.OnRoundEnd -= OnRoundEnd;
     }
 }

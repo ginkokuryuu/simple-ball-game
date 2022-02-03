@@ -21,8 +21,10 @@ public class AttackerAI : SoldierAI
     public bool IsCollidingWithGoal { get => isCollidingWithGoal; set => isCollidingWithGoal = value; }
     public bool IsCollidingWithWall { get => isCollidingWithWall; set => isCollidingWithWall = value; }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         ObjectLoader.INSTANCE.AllAttackers.Add(this);
     }
 
@@ -38,7 +40,7 @@ public class AttackerAI : SoldierAI
         FindNearbyAllyNode findNearbyAllyNode = new FindNearbyAllyNode(this);
         PassToAllyNode passToAllyNode = new PassToAllyNode(this);
         InactivateNode inactivateNode = new InactivateNode(this);
-        AttackerLoseNode attackerLoseNode = new AttackerLoseNode();
+        AttackerLoseNode attackerLoseNode = new AttackerLoseNode(this);
         IsHoldingBallNode isHoldingBallNode = new IsHoldingBallNode(this);
         TouchedByDefenderNode touchedByDefenderNode = new TouchedByDefenderNode(this);
 
@@ -48,12 +50,14 @@ public class AttackerAI : SoldierAI
         ChaseBallNode chaseBallNode = new ChaseBallNode(this);
 
         IsTouchingGoalNode isTouchingGoalNode = new IsTouchingGoalNode(this);
-        AttackerWinNode attackerWinNode = new AttackerWinNode();
+        AttackerWinNode attackerWinNode = new AttackerWinNode(this);
         ChaseGoalNode chaseGoalNode = new ChaseGoalNode(this);
 
         IsTouchingWallNode isTouchingWallNode = new IsTouchingWallNode(this);
         DestroyNode destroyNode = new DestroyNode(this);
         GoForwardNode goForwardNode = new GoForwardNode(this);
+
+        IsGameOverNode isGameOverNode = new IsGameOverNode(this);
 
         IsInactiveNode isInactiveNode = new IsInactiveNode(this);
 
@@ -133,6 +137,7 @@ public class AttackerAI : SoldierAI
 
         rootBehaviourNode = new SelectorNode(new List<Node>
         {
+            isGameOverNode,
             isInactiveNode,
             activeSelector
         });
@@ -149,11 +154,6 @@ public class AttackerAI : SoldierAI
         StartCoroutine(DefenderCollisionBuffer());
     }
 
-    public bool IsCollidingWall()
-    {
-        throw new NotImplementedException();
-    }
-
     public void GrabBall()
     {
         isHoldingBall = true;
@@ -168,23 +168,19 @@ public class AttackerAI : SoldierAI
         this.target = target;
     }
 
-    public void Move(float speed)
-    {
-        moveSpeed = speed;
-        isMoving = true;
-    }
-
     public void GoStraight(float speed)
     {
         this.target = null;
-        Vector3 forward = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1f);
+
+        int modifier = 0;
+        if (player == Owner.Player1)
+            modifier += 1;
+        else
+            modifier -= 1;
+
+        Vector3 forward = new Vector3(transform.position.x, transform.position.y, transform.position.z + modifier);
         transform.LookAt(forward, transform.up);
         Move(speed);
-    }
-
-    public void DestroySelf()
-    {
-        Destroy(this.gameObject);
     }
 
     public void PassTheBall()
@@ -243,5 +239,12 @@ public class AttackerAI : SoldierAI
     {
         yield return new WaitForEndOfFrame();
         isCollidingWithWall = false;
+    }
+
+    public override void DestroySelf()
+    {
+        print("lol");
+        ObjectLoader.INSTANCE.AllAttackers.Remove(this);
+        base.DestroySelf();
     }
 }
