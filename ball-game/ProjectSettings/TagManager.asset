@@ -9,6 +9,7 @@ TagManager:
   - Ball
   - Wall
   - Goal
+  - MazeGoal
   layers:
   - Default
   - TransparentFX

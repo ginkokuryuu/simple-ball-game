@@ -15,7 +15,7 @@ public class MazeGenerator : MonoBehaviour
 
     [SerializeField] Transform mazeContainer = null;
 
-    public void Start()
+    public void StartGeneratingMaze()
     {
         tiles = new Tile[width * height];
         for (int i = 0; i < width * height; i++)
@@ -26,7 +26,7 @@ public class MazeGenerator : MonoBehaviour
         edges = new List<Edge>();
 
         SpawnLeftRightBoundaries();
-        SpawnUpDownBoundaries();
+        //SpawnUpDownBoundaries();
         SpawnInnerEdgesLeftRight();
         SpawnInnerEdgesUpDown();
 
@@ -127,7 +127,6 @@ public class MazeGenerator : MonoBehaviour
         if (Tile.GetHighestParent(randomEdge.tiles[0]) == Tile.GetHighestParent(randomEdge.tiles[1]))
             return;
 
-        print("lel");
         Tile.GetHighestParent(randomEdge.tiles[1]).parent = randomEdge.tiles[0];
         randomEdge.DisableEdge();
     }
@@ -139,6 +138,14 @@ public class MazeGenerator : MonoBehaviour
         for (int i = 0; i < loopNum; i++)
         {
             RemoveEdges();
+        }
+    }
+
+    public void ResetMaze()
+    {
+        for(int i = mazeContainer.childCount - 1; i >= 1; i--)
+        {
+            Destroy(mazeContainer.GetChild(i).gameObject);
         }
     }
 }
