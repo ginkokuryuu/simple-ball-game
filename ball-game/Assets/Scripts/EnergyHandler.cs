@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnergyHandler : MonoBehaviour
 {
     public static EnergyHandler INSTACE;
 
     [SerializeField] float regenerationRate = 0.5f;
+    [SerializeField] List<Image> energyBars = new List<Image>();
     List<float> energyCosts;
     float[] energies;
     bool isRoundStarted = false;
@@ -33,6 +35,16 @@ public class EnergyHandler : MonoBehaviour
     {
         if(isRoundStarted)
             Regenerate();
+
+        Visualize();
+    }
+
+    void Visualize()
+    {
+        for(int i = 0; i < 2; i++)
+        {
+            energyBars[i].fillAmount = energies[i] / 6f;
+        }
     }
 
     void Regenerate()
@@ -40,7 +52,7 @@ public class EnergyHandler : MonoBehaviour
         for(int i = 0; i < 2; i++)
         {
             energies[i] += regenerationRate * Time.deltaTime;
-            energies[i] = Mathf.Clamp(energies[i], 0, 5);
+            energies[i] = Mathf.Clamp(energies[i], 0, 6);
         }
     }
 

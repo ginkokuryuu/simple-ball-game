@@ -6,7 +6,9 @@ public enum GameState
 {
     WaitingToStart,
     Running,
-    WaitingToNextRound
+    WaitingToNextRound,
+    WaitingMaze,
+    MazeRunning
 }
 
 public class GameManager : MonoBehaviour
@@ -79,7 +81,7 @@ public class GameManager : MonoBehaviour
         {
             currentScore += 1;
         }
-        else
+        else if(_winner == Owner.Player2)
         {
             currentScore -= 1;
         }

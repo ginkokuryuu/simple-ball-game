@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Owner { Player1, Player2 }
+public enum Owner { Player1, Player2, TimeOut }
 
 public class SoldierAI : MonoBehaviour
 {
