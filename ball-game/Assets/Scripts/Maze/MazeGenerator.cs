@@ -143,7 +143,7 @@ public class MazeGenerator : MonoBehaviour
 
     public void ResetMaze()
     {
-        for(int i = mazeContainer.childCount - 1; i >= 1; i--)
+        for(int i = mazeContainer.childCount - 1; i >= 0; i--)
         {
             Destroy(mazeContainer.GetChild(i).gameObject);
         }

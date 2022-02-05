@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager INSTANCE;
     
-    [SerializeField] int currentMatch = 0;
+    int currentMatch = 0;
     GameState gameState = GameState.WaitingToStart;
     int currentScore = 0;
 
@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
                 StartGame();
             else if (gameState == GameState.WaitingToNextRound)
                 NextRound();
+            else if (gameState == GameState.WaitingMaze)
+                MazeStart();
         }
     }
 
@@ -63,11 +65,29 @@ public class GameManager : MonoBehaviour
         gameState = GameState.Running;
     }
 
+    public void MazeStart()
+    {
+        MazeHandler.INSTANCE.StartMaze();
+        MyEventSystem.INSTANCE.MazeStart();
+
+        gameState = GameState.MazeRunning;
+    }
+
     public void GameOver()
     {
         gameState = GameState.WaitingToStart;
 
         MyEventSystem.INSTANCE.GameOver();
+    }
+
+    public void MazeClear(bool _win)
+    {
+        if (_win)
+            currentScore += 1;
+        else
+            currentScore -= 1;
+
+        GameOver();
     }
 
     public void RoundClear(Owner _winner)
@@ -89,7 +109,15 @@ public class GameManager : MonoBehaviour
         currentMatch += 1;
         if(currentMatch == 5)
         {
-            GameOver();
+            bool needPenalty = (currentScore == 0);
+            if (needPenalty)
+            {
+                gameState = GameState.WaitingMaze;
+            }
+            else
+            {
+                GameOver();
+            }
         }
     }
 }

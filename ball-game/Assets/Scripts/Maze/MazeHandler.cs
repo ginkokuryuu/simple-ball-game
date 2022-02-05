@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class MazeHandler : MonoBehaviour
 {
+    public static MazeHandler INSTANCE;
+
     [SerializeField] GameObject playerPrefab = null;
     [SerializeField] GameObject ballPrefab = null;
     [SerializeField] GameObject mazeGoal = null;
@@ -22,6 +24,11 @@ public class MazeHandler : MonoBehaviour
 
     Vector3 destination = new Vector3();
 
+    private void Awake()
+    {
+        INSTANCE = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,8 +44,6 @@ public class MazeHandler : MonoBehaviour
         if (isRunning)
         {
             float distance = Vector3.Distance(playerAgent.transform.position, destination);
-            //print(destination + " distance: " + distance);
-
 
             if (distance <= 1f)
             {
@@ -95,7 +100,12 @@ public class MazeHandler : MonoBehaviour
 
     void GoalReached()
     {
-        Debug.Log("Win");
+        ResetObject();
+        GameManager.INSTANCE.MazeClear(true);
+    }
+
+    void ResetObject()
+    {
         isChasingGoal = false;
         isRunning = false;
         isChasingBall = false;
@@ -105,5 +115,11 @@ public class MazeHandler : MonoBehaviour
         Destroy(ball.gameObject);
 
         mazeGenerator.ResetMaze();
+    }
+
+    public void OnTimerRunOut()
+    {
+        ResetObject();
+        GameManager.INSTANCE.MazeClear(false);
     }
 }

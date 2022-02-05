@@ -39,4 +39,11 @@ public class MyEventSystem : MonoBehaviour
         Debug.Log("Broadcasted Round End");
         OnRoundEnd?.Invoke();
     }
+
+    public Action OnMazeStart;
+    public void MazeStart()
+    {
+        Debug.Log("Broadcasted Maze Start");
+        OnMazeStart?.Invoke();
+    }
 }

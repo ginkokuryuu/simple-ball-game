@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
-    [SerializeField] float maxTimer = 140f;
+    [SerializeField] float roundMaxTimer = 140f;
     [SerializeField] TMPro.TMP_Text timerText = null;
     float counter = 0f;
     bool isMatchRunning = false;
+    bool isMaze = false;
 
     private void Awake()
     {
         MyEventSystem.INSTANCE.OnRoundStart += OnRoundStart;
         MyEventSystem.INSTANCE.OnRoundEnd += OnRoundEnd;
+        MyEventSystem.INSTANCE.OnMazeStart += OnMazeStart;
     }
 
     // Start is called before the first frame update
@@ -37,13 +39,24 @@ public class Timer : MonoBehaviour
     void TimeOut()
     {
         isMatchRunning = false;
-        GameManager.INSTANCE.RoundClear(Owner.TimeOut);
+        if (isMaze)
+            MazeHandler.INSTANCE.OnTimerRunOut();
+        else
+            GameManager.INSTANCE.RoundClear(Owner.TimeOut);
+    }
+
+    public void OnMazeStart()
+    {
+        isMatchRunning = true;
+        isMaze = true;
+        counter = roundMaxTimer;
     }
 
     public void OnRoundStart()
     {
         isMatchRunning = true;
-        counter = maxTimer;
+        isMaze = false;
+        counter = roundMaxTimer;
     }
 
     public void OnRoundEnd()
@@ -55,5 +68,6 @@ public class Timer : MonoBehaviour
     {
         MyEventSystem.INSTANCE.OnRoundStart -= OnRoundStart;
         MyEventSystem.INSTANCE.OnRoundEnd -= OnRoundEnd;
+        MyEventSystem.INSTANCE.OnMazeStart -= OnMazeStart;
     }
 }
