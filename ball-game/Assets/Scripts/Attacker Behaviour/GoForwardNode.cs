@@ -13,7 +13,7 @@ public class GoForwardNode : Node
 
     public override NODE_STATE Evaluate()
     {
-        attackerAI.GoStraight(1.5f);
+        attackerAI.GoStraight(1.5f * Const.scaleMultiplier);
         nodeState = NODE_STATE.RUNNING;
         return nodeState;
     }

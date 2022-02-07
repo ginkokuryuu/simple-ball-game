@@ -15,7 +15,7 @@ public class ChaseAttackerNode : Node
     {
         defender.IsChasingAttacker = true;
         defender.ChangeMoveTarget(defender.TargetAttacker.transform);
-        defender.Move(1.0f);
+        defender.Move(1.0f * Const.scaleMultiplier);
         nodeState = NODE_STATE.RUNNING;
         return nodeState;
     }

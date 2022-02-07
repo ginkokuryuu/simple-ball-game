@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public static class Const
+{
+    public const float scaleMultiplier = 1f;
+}
+
 public enum GameState
 {
     WaitingToStart,

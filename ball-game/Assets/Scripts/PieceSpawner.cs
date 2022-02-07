@@ -31,7 +31,7 @@ public class PieceSpawner : MonoBehaviour
         float maxX = 5f;
 
         GameObject theBall = Instantiate(ballPrefabs, fieldPlay, false);
-        theBall.transform.position = new Vector3(Random.Range(minX, maxX), 0.85f, Random.Range(minZ, maxZ));
+        theBall.transform.localPosition = new Vector3(Random.Range(minX, maxX), 0.85f, Random.Range(minZ, maxZ));
     }
 
     public bool TryToSpawnSoldier(SoldierType _soldierType, Owner _owner, Vector3 _position)

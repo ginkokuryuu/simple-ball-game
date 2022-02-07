@@ -14,7 +14,7 @@ public class ChaseBallNode : Node
     public override NODE_STATE Evaluate()
     {
         attackerAI.ChangeMoveTarget(ObjectLoader.INSTANCE.Ball.transform);
-        attackerAI.Move(1.5f);
+        attackerAI.Move(1.5f * Const.scaleMultiplier);
         nodeState = NODE_STATE.RUNNING;
         return nodeState;
     }

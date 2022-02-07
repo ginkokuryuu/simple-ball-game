@@ -14,7 +14,7 @@ public class ChaseGoalNode : Node
     public override NODE_STATE Evaluate()
     {
         attackerAI.ChangeMoveTarget(ObjectLoader.INSTANCE.GetGoal(attackerAI.Player));
-        attackerAI.Move(0.75f);
+        attackerAI.Move(0.75f * Const.scaleMultiplier);
         nodeState = NODE_STATE.RUNNING;
         return nodeState;
     }

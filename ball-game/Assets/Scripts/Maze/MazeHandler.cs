@@ -32,7 +32,6 @@ public class MazeHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -73,6 +72,7 @@ public class MazeHandler : MonoBehaviour
         GameObject player = Instantiate(playerPrefab, agentContainer, false);
         player.transform.localPosition = new Vector3(0, 1.5f, -11f);
         playerAgent = player.GetComponent<NavMeshAgent>();
+        playerAgent.speed = 1f * Const.scaleMultiplier;
 
         StartChase();
     }

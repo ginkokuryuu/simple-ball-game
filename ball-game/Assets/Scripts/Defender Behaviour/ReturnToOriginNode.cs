@@ -15,7 +15,7 @@ public class ReturnToOriginNode : Node
     {
         defender.ChangeMoveTarget(null);
         defender.transform.LookAt(defender.OriginPos);
-        defender.Move(2f);
+        defender.Move(2f * Const.scaleMultiplier);
         nodeState = NODE_STATE.RUNNING;
 
         return nodeState;
