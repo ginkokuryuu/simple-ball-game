@@ -52,7 +52,7 @@ public class PieceSpawner : MonoBehaviour
         if(!EnergyHandler.INSTACE.TrySpentEnergy((int)_owner, 2 + (int)_soldierType))
             return false;
 
-        Instantiate(toBeSpawned, new Vector3(_position.x, 1.5f, _position.z), Quaternion.identity, fieldPlay);
+        Instantiate(toBeSpawned, new Vector3(_position.x, _position.y + 1f, _position.z), Quaternion.identity, fieldPlay);
         return true;
     }
 

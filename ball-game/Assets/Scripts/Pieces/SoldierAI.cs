@@ -8,6 +8,7 @@ public enum Owner { Player1, Player2, TimeOut }
 public class SoldierAI : MonoBehaviour
 {
     [SerializeField] protected float reactivateTime = 2.5f;
+    [SerializeField] Animator animator = null;
     protected Node rootBehaviourNode;
     protected bool isActive = false;
     protected bool isMoving = false;
@@ -104,7 +105,10 @@ public class SoldierAI : MonoBehaviour
 
     public virtual void DestroySelf()
     {
-        Destroy(this.gameObject);
+        Inactivate();
+        StopMove();
+        animator.Play("Death Animation");
+        StartCoroutine(WaitThenDestroy());
     }
 
     public void OnRoundEnd()
@@ -115,5 +119,12 @@ public class SoldierAI : MonoBehaviour
     private void OnDestroy()
     {
         MyEventSystem.INSTANCE.OnRoundEnd -= OnRoundEnd;
+    }
+
+    IEnumerator WaitThenDestroy()
+    {
+        yield return new WaitForSecondsRealtime(1f);
+
+        Destroy(this.gameObject);
     }
 }

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class DefenderAI : SoldierAI
 {
+    [SerializeField] GameObject searchIndicator = null;
+    [SerializeField] GameObject moveIndicator = null;
+
     Vector3 originPos = new Vector3();
     bool isChasingAttacker = false;
     bool isCollidingAttacker = false;
@@ -99,6 +102,12 @@ public class DefenderAI : SoldierAI
             isCollidingAttacker = true;
             StartCoroutine(AttackerCollisionBuffer());
         }
+    }
+
+    public void ToggleIndicator(bool _state)
+    {
+        searchIndicator.SetActive(_state);
+        moveIndicator.SetActive(!_state);
     }
 
     IEnumerator AttackerCollisionBuffer()

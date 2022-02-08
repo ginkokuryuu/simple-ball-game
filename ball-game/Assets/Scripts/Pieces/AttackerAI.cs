@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class AttackerAI : SoldierAI
 {
     [SerializeField] private Transform ballHoldingSpot = null;
+    [SerializeField] private GameObject holdingIndicator = null;
     bool isHoldingBall = false;
     bool isCollidingWithDefender = false;
     bool isCollidingWithBall = false;
@@ -148,14 +149,10 @@ public class AttackerAI : SoldierAI
         base.Update();
     }
 
-    private void OnMouseDown()
-    {
-        isCollidingWithDefender = true;
-        StartCoroutine(DefenderCollisionBuffer());
-    }
-
     public void GrabBall()
     {
+        holdingIndicator.SetActive(true);
+
         isHoldingBall = true;
         gameObject.layer = 12;
         ball.HoldBy(ballHoldingSpot);
@@ -185,6 +182,8 @@ public class AttackerAI : SoldierAI
 
     public void PassTheBall()
     {
+        holdingIndicator.SetActive(false);
+
         isHoldingBall = false;
         gameObject.layer = originLayer;
         ball.PassToAlly(closestAlly);

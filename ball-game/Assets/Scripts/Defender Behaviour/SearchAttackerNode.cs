@@ -14,6 +14,7 @@ public class SearchAttackerNode : Node
     public override NODE_STATE Evaluate()
     {
         defender.StopMove();
+        defender.ToggleIndicator(true);
 
         AttackerAI attackerHoldingBall = ObjectLoader.INSTANCE.AttackerHoldingBall;
         if (attackerHoldingBall == null)
@@ -25,6 +26,7 @@ public class SearchAttackerNode : Node
             defender.IsAttackerFound = true;
             defender.TargetAttacker = attackerHoldingBall;
             nodeState = NODE_STATE.SUCCESS;
+            defender.ToggleIndicator(false);
         }
         else
         {

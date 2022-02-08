@@ -53,8 +53,10 @@ public class PlayerControl : MonoBehaviour
     void PlayerTouch(Vector3 _position)
     {
         RaycastHit hit;
+        if(Camera.current != null)
+            theCamera = Camera.current;
         Ray ray = theCamera.ScreenPointToRay(_position);
-        if(Physics.Raycast(ray, out hit, 3000, fieldLayer))
+        if(Physics.Raycast(ray, out hit, Mathf.Infinity, fieldLayer))
         {
             float sidePoint = hit.transform.InverseTransformPoint(hit.point).z;
             bool evenMatch = GameManager.INSTANCE.CurrentMatch % 2 == 0;

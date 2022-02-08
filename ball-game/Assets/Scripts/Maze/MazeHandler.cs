@@ -7,6 +7,8 @@ public class MazeHandler : MonoBehaviour
 {
     public static MazeHandler INSTANCE;
 
+    [SerializeField] NavMeshSurface surface = null;
+
     [SerializeField] GameObject playerPrefab = null;
     [SerializeField] GameObject ballPrefab = null;
     [SerializeField] GameObject mazeGoal = null;
@@ -64,6 +66,8 @@ public class MazeHandler : MonoBehaviour
 
     public void StartMaze()
     {
+        surface.BuildNavMesh();
+
         mazeGenerator.StartGeneratingMaze();
 
         ball = Instantiate(ballPrefab, ballContainer, false);

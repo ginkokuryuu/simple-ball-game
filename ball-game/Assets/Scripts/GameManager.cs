@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
 
     public int CurrentMatch { get => currentMatch; set => currentMatch = value; }
     public GameState GameState { get => gameState; set => gameState = value; }
+    public int CurrentScore { get => currentScore; set => currentScore = value; }
 
     private void Awake()
     {
@@ -41,16 +42,19 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (gameState == GameState.WaitingToStart)
-                StartGame();
-            else if (gameState == GameState.WaitingToNextRound)
-                NextRound();
-            else if (gameState == GameState.WaitingMaze)
-                MazeStart();
-        }
+
     }
+
+    public void TryStartGame()
+    {
+        if (gameState == GameState.WaitingToStart)
+            StartGame();
+        else if (gameState == GameState.WaitingToNextRound)
+            NextRound();
+        else if (gameState == GameState.WaitingMaze)
+            MazeStart();
+    }
+    
 
     public void StartGame()
     {
@@ -93,6 +97,7 @@ public class GameManager : MonoBehaviour
             currentScore -= 1;
 
         GameOver();
+        MenuHandler.INSTANCE.GameOver(false);
     }
 
     public void RoundClear(Owner _winner)
@@ -118,11 +123,17 @@ public class GameManager : MonoBehaviour
             if (needPenalty)
             {
                 gameState = GameState.WaitingMaze;
+                MenuHandler.INSTANCE.GameOver(true);
             }
             else
             {
                 GameOver();
+                MenuHandler.INSTANCE.GameOver(false);
             }
+        }
+        else
+        {
+            MenuHandler.INSTANCE.RoundEnd(_winner);
         }
     }
 }

@@ -104,6 +104,9 @@ public class ARControl : MonoBehaviour
 
     public void ToggleARMode()
     {
+        if (ARSession.state == ARSessionState.Unsupported)
+            return;
+
         if (arSession.isActiveAndEnabled)
         {
             arSession.enabled = !arSession.isActiveAndEnabled;
