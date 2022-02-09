@@ -6694,7 +6694,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75ce746e64522054db93853c170646c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roundMaxTimer: 140
+  roundMaxTimer: 10
   timerText: {fileID: 1079771312}
 --- !u!1 &1908128227
 GameObject:
