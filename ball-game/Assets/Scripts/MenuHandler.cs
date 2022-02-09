@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuHandler : MonoBehaviour
 {
@@ -65,5 +66,20 @@ public class MenuHandler : MonoBehaviour
             }
             gameOverText.text = text;
         }
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void PlayGame()
+    {
+        SceneManager.LoadScene("GameScene");
+    }
+
+    public void QuitApplication()
+    {
+        Application.Quit();
     }
 }

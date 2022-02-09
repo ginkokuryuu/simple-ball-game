@@ -28,6 +28,8 @@ public class ARControl : MonoBehaviour
     Vector3 camOriginPos;
     Quaternion camOriginRot;
 
+    [SerializeField] RectTransform buttonToggle = null;
+
     IEnumerator Start()
     {
         if ((ARSession.state == ARSessionState.None) || (ARSession.state == ARSessionState.CheckingAvailability))
@@ -111,11 +113,13 @@ public class ARControl : MonoBehaviour
         {
             arSession.enabled = !arSession.isActiveAndEnabled;
             ARDisabled();
+            buttonToggle.rotation = Quaternion.Euler(0f, 0f, 180f);
         }
         else
         {
             AREnabled();
             arSession.enabled = !arSession.isActiveAndEnabled;
+            buttonToggle.rotation = Quaternion.Euler(0f, 0f, 0f);
         }
 
     }
